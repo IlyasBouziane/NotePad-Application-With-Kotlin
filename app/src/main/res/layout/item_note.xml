@@ -24,8 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Title's note"
-            android:textStyle="bold"
-            android:textSize="20dp"/>
+            style="@style/NoteTitleFont"
+            />
         <TextView
             android:id="@+id/excerpt"
             android:layout_width="match_parent"

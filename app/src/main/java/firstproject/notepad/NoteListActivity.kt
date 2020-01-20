@@ -1,5 +1,6 @@
 package firstproject.notepad
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,11 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         if(v.tag != null){
             Log.i("NoteListActivity","A note has been clicked on. The test was succesful")
+            val intent = Intent(this,NoteDetailsActivity::class.java)
+
+            val note = notes[v.tag as Int]
+            intent.putExtra("note",note)
+            startActivity(intent)
         }
 
     }
