@@ -16,11 +16,13 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         if(v.tag != null){
+            val note : Note
             Log.i("NoteListActivity","A note has been clicked on. The test was succesful")
             val intent = Intent(this,NoteDetailsActivity::class.java)
-
-            val note = notes[v.tag as Int]
-            intent.putExtra("note",note)
+            val position = v.tag as Int
+            note = notes[position]
+            intent.putExtra(NoteDetailsActivity.EXTRA_NOTE,note)
+            intent.putExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,position)
             startActivity(intent)
         }
 

@@ -5,11 +5,11 @@ import android.os.Parcelable
 
 data class Note (var title : String = "",
                  var text : String = "",
-                 var filename : String? ="") : Parcelable {
+                 var filename : String ="") : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()
+        parcel.readString()!!
     ) {
     }
 
