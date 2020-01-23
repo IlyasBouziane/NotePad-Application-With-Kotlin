@@ -1,5 +1,6 @@
 package firstproject.notepad
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,10 +24,29 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
             note = notes[position]
             intent.putExtra(NoteDetailsActivity.EXTRA_NOTE,note)
             intent.putExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,position)
-            startActivity(intent)
+            startActivityForResult(intent,NoteDetailsActivity.REQUEST_EDIT_NOTE)
         }
 
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(resultCode != Activity.RESULT_OK || data == null ){
+            return
+        }
+        when(requestCode){
+            NoteDetailsActivity.REQUEST_EDIT_NOTE -> saveNote(data)
+            else -> super.onActivityResult(requestCode, resultCode, data)
+        }
+
+    }
+
+    fun saveNote(data : Intent ) {
+        val note = data.getParcelableExtra<Note>(NoteDetailsActivity.EXTRA_NOTE)
+        val noteIndex = data.getIntExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,-1)
+        notes[noteIndex] = note
+        adapter.notifyDataSetChanged()
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
