@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_note_details.*
 import org.w3c.dom.Text
 
@@ -21,6 +22,10 @@ class NoteDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_details)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
 
         note = intent.getParcelableExtra<Note>(EXTRA_NOTE)
