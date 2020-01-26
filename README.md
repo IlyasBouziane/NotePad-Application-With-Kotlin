@@ -15,4 +15,5 @@ This is my first Android application !
 
 ## Shortcuts of the final project 
 
+!image[](/screenshots/1.jpg)
 
