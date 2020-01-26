@@ -13,7 +13,7 @@ This is my first Android application !
 > **Note:** I used file storage for data persistence 
 
 
-## Shortcuts of the final project 
+## Screenshots of the final project 
 
-!image[](/screenshots/1.jpg)
+!image[](screenshots/1.jpg)
 
