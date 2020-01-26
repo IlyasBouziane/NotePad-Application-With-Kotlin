@@ -62,17 +62,24 @@ class NoteDetailsActivity : AppCompatActivity() {
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_save -> {
-                saveNote()
-                return true
+        /*
+         * Can't delete an empty new note or save it
+         */
+        if(noteIndex != -1) {
+            when (item.itemId) {
+                R.id.action_save -> {
+                    saveNote()
+                    return true
+                }
+                R.id.action_delete -> {
+                    showConfirmDeleteNoteDialog()
+                    return true
+                }
+                else -> return super.onOptionsItemSelected(item)
             }
-            R.id.action_delete -> {
-                showConfirmDeleteNoteDialog()
-                return true
-            }
-            else -> return super.onOptionsItemSelected(item)
-        }
+        } else
+            return super.onOptionsItemSelected(item)
+
     }
     private fun saveNote(){
         note.title = title.text.toString()
@@ -100,20 +107,16 @@ class NoteDetailsActivity : AppCompatActivity() {
     }
     private fun showConfirmDeleteNoteDialog(){
         val dialogFragment = ConfirmDeleteDialog(note.title)
-        /*
-         * Can't delete a new note !
-         */
-        if(noteIndex != -1 ) {
-            dialogFragment.listener = object : ConfirmDeleteDialog.ConfirmDeleteDialogListener {
-                override fun onDialogPositiveClick() {
-                    deleteNote()
-                }
-
-                override fun onDialogNegativeClick() {
-                    Log.i("TAG", "cancel")
-                }
+        dialogFragment.listener = object : ConfirmDeleteDialog.ConfirmDeleteDialogListener {
+            override fun onDialogPositiveClick() {
+                deleteNote()
             }
-            dialogFragment.show(supportFragmentManager, "ConfirmDeleteDialogFragment")
+
+            override fun onDialogNegativeClick() {
+                Log.i("TAG", "cancel")
+            }
         }
+        dialogFragment.show(supportFragmentManager, "ConfirmDeleteDialogFragment")
+
     }
 }
