@@ -100,15 +100,20 @@ class NoteDetailsActivity : AppCompatActivity() {
     }
     private fun showConfirmDeleteNoteDialog(){
         val dialogFragment = ConfirmDeleteDialog(note.title)
-        dialogFragment.listener = object : ConfirmDeleteDialog.ConfirmDeleteDialogListener{
-            override fun onDialogPositiveClick() {
-                deleteNote()
-            }
+        /*
+         * Can't delete a new note !
+         */
+        if(noteIndex != -1 ) {
+            dialogFragment.listener = object : ConfirmDeleteDialog.ConfirmDeleteDialogListener {
+                override fun onDialogPositiveClick() {
+                    deleteNote()
+                }
 
-            override fun onDialogNegativeClick() {
-                Log.i("TAG","cancel")
+                override fun onDialogNegativeClick() {
+                    Log.i("TAG", "cancel")
+                }
             }
+            dialogFragment.show(supportFragmentManager, "ConfirmDeleteDialogFragment")
         }
-        dialogFragment.show(supportFragmentManager,"ConfirmDeleteDialogFragment")
     }
 }

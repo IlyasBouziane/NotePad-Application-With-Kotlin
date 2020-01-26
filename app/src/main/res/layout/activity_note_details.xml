@@ -22,6 +22,9 @@
         style="@style/NoteTitleFont"
         android:hint="Note's Title"
         android:layout_below="@+id/toolbar"
+        android:inputType="text"
+        android:maxLines="1"
+        android:maxLength="20"
         />
 
     <EditText
