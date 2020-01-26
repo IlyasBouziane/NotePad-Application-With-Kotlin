@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -105,7 +106,12 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         note = if(position < 0) Note() else notes[position]
 
         val intent = Intent(this,NoteDetailsActivity::class.java)
-        intent.putExtra(NoteDetailsActivity.EXTRA_NOTE,note)
+        intent.putExtra(NoteDetailsActivity.EXTRA_NOTE,note as Parcelable)
+        /*
+         * Need to add as Parcelable because there is 2 putExtra methods
+         * and each one takes as parameter either Parcelable or Serializable
+         * I choosed Parcelable because in this case it is an object transmitted to another activity
+         */
         intent.putExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,position)
         startActivityForResult(intent,NoteDetailsActivity.REQUEST_EDIT_NOTE)
     }

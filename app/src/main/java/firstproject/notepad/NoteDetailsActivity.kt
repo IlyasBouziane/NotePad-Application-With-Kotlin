@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -78,7 +79,12 @@ class NoteDetailsActivity : AppCompatActivity() {
         note.text = text.text.toString()
 
         intent = Intent()
-        intent.putExtra(EXTRA_NOTE,note)
+        intent.putExtra(EXTRA_NOTE,note as Parcelable)
+        /*
+         * Need to add as Parcelable because there is 2 putExtra methods
+         * and each one takes as parameter either Parcelable or Serializable
+         * I choosed Parcelable because in this case it is an object transmitted to another activity
+         */
         intent.putExtra(EXTRA_NOTE_INDEX,noteIndex)
         intent.action = ACTION_SAVE
 
