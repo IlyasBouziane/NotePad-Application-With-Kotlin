@@ -25,17 +25,22 @@ class NoteDetailsActivity : AppCompatActivity() {
     lateinit var text : TextView
     var noteIndex = -1
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_details)
-
+        /*
+         * Link to the customized toolbar
+         */
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        /*
+         * Link this activity to the main activity : NoteListActivity
+         */
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-
+        /*
+         * Create intent and the parcelable object
+         */
         note = intent.getParcelableExtra<Note>(EXTRA_NOTE)
         noteIndex = intent.getIntExtra(EXTRA_NOTE_INDEX,-1)
 
@@ -49,9 +54,11 @@ class NoteDetailsActivity : AppCompatActivity() {
     fun saveNote(){
         note.title = title.text.toString()
         note.text = text.text.toString()
+
         intent = Intent()
         intent.putExtra(EXTRA_NOTE,note)
         intent.putExtra(EXTRA_NOTE_INDEX,noteIndex)
+
         setResult(Activity.RESULT_OK,intent)
         finish()
     }
@@ -59,12 +66,10 @@ class NoteDetailsActivity : AppCompatActivity() {
     /*
      * Menu
      */
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.activity_note_details,menu)
         return true
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_save -> {
@@ -74,6 +79,4 @@ class NoteDetailsActivity : AppCompatActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
     }
-
-
 }
