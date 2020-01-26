@@ -19,7 +19,10 @@ class NoteDetailsActivity : AppCompatActivity() {
         val EXTRA_NOTE = "note"
         val EXTRA_NOTE_INDEX ="noteIndex"
         val REQUEST_EDIT_NOTE = 1
+        val ACTION_DELETE = "firstproject.notepad.ACTIONS.ACTION_DELETE_NOTE"
+        val ACTION_SAVE = "firstproject.notepad.ACTIONS.ACTION_SAVE_NOTE"
     }
+
     lateinit var note : Note
     lateinit var title : TextView
     lateinit var text : TextView
@@ -50,19 +53,6 @@ class NoteDetailsActivity : AppCompatActivity() {
         text = findViewById<TextView>(R.id.text)
         text.text = note.text
     }
-
-    fun saveNote(){
-        note.title = title.text.toString()
-        note.text = text.text.toString()
-
-        intent = Intent()
-        intent.putExtra(EXTRA_NOTE,note)
-        intent.putExtra(EXTRA_NOTE_INDEX,noteIndex)
-
-        setResult(Activity.RESULT_OK,intent)
-        finish()
-    }
-
     /*
      * Menu
      */
@@ -76,7 +66,43 @@ class NoteDetailsActivity : AppCompatActivity() {
                 saveNote()
                 return true
             }
+            R.id.action_delete -> {
+                showConfirmDeleteNoteDialog()
+                return true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+    private fun saveNote(){
+        note.title = title.text.toString()
+        note.text = text.text.toString()
+
+        intent = Intent()
+        intent.putExtra(EXTRA_NOTE,note)
+        intent.putExtra(EXTRA_NOTE_INDEX,noteIndex)
+        intent.action = ACTION_SAVE
+
+        setResult(Activity.RESULT_OK,intent)
+        finish()
+    }
+    private fun deleteNote(){
+        intent = Intent()
+        intent.putExtra(EXTRA_NOTE_INDEX,noteIndex)
+        intent.action = ACTION_DELETE
+        setResult(Activity.RESULT_OK,intent)
+        finish()
+    }
+    private fun showConfirmDeleteNoteDialog(){
+        val dialogFragment = ConfirmDeleteDialog(note.title)
+        dialogFragment.listener = object : ConfirmDeleteDialog.ConfirmDeleteDialogListener{
+            override fun onDialogPositiveClick() {
+                deleteNote()
+            }
+
+            override fun onDialogNegativeClick() {
+                Log.i("TAG","cancel")
+            }
+        }
+        dialogFragment.show(supportFragmentManager,"ConfirmDeleteDialogFragment")
     }
 }

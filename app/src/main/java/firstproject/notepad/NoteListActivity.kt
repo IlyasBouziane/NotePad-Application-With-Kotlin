@@ -10,6 +10,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import firstproject.notepad.NoteDetailsActivity.Companion.ACTION_DELETE
+import firstproject.notepad.NoteDetailsActivity.Companion.ACTION_SAVE
 
 class NoteListActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -44,15 +46,21 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
     }
+
     /*
-     * After making changes on a note and get back to the notes' list
+     * After making changes on a note / deleting a note and get back to the notes' list
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode != Activity.RESULT_OK || data == null ){
             return
         }
         when(requestCode){
-            NoteDetailsActivity.REQUEST_EDIT_NOTE -> saveNote(data)
+            NoteDetailsActivity.REQUEST_EDIT_NOTE -> {
+                when(data.action) {
+                    ACTION_SAVE -> saveNote(data)
+                    ACTION_DELETE -> deleteNote(data)
+                }
+            }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
@@ -69,6 +77,14 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         }
         adapter.notifyDataSetChanged()
     }
+    fun deleteNote(data : Intent) {
+        val indexNoteToDelete = data.getIntExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,-1)
+        if(indexNoteToDelete < 0)
+            return;
+        notes.removeAt(indexNoteToDelete)
+        adapter.notifyDataSetChanged()
+    }
+
     /*
      * onClick method defines the actions after clicking on the item or the add button
      */
