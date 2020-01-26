@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import firstproject.notepad.NoteDetailsActivity.Companion.ACTION_DELETE
 import firstproject.notepad.NoteDetailsActivity.Companion.ACTION_SAVE
+import firstproject.notepad.utils.deleteNote
+import firstproject.notepad.utils.loadNotes
+import firstproject.notepad.utils.persistNote
 
 class NoteListActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -32,12 +35,9 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
          */
         findViewById<FloatingActionButton>(R.id.floating_button).setOnClickListener(this)
         /*
-         * Static list for now
+         * Dynamic List imported for the context directory
          */
-        notes = mutableListOf()
-        notes.add(Note("Note 1 ","Premier test est un succés !"))
-        notes.add(Note("Note 2","There are lot of things to do this holiday , but inchallah I can do all of them because I believe better in Allah Hamdulilah :)"))
-        notes.add(Note("Note 3","YOU CAN DO IT !"))
+        notes = loadNotes(this)
         /*
          * Created the recyclerView
          */
@@ -68,6 +68,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
     fun saveNote(data : Intent ) {
         val note = data.getParcelableExtra<Note>(NoteDetailsActivity.EXTRA_NOTE)
         val noteIndex = data.getIntExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,-1)
+        persistNote(this,note)
         /*
          * noteIndex == -1 means there is a new note to be added
          */
@@ -80,6 +81,8 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
     }
     fun deleteNote(data : Intent) {
         val indexNoteToDelete = data.getIntExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,-1)
+        val note = notes[indexNoteToDelete]
+        deleteNote(this,note)
         if(indexNoteToDelete < 0)
             return;
         notes.removeAt(indexNoteToDelete)
