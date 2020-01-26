@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteListActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -23,6 +24,10 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
          */
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        /*
+         * Activate floating button listener
+         */
+        findViewById<FloatingActionButton>(R.id.floating_button).setOnClickListener(this)
         /*
          * Static list for now
          */
@@ -54,29 +59,41 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
     fun saveNote(data : Intent ) {
         val note = data.getParcelableExtra<Note>(NoteDetailsActivity.EXTRA_NOTE)
         val noteIndex = data.getIntExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,-1)
-        notes[noteIndex] = note
+        /*
+         * noteIndex == -1 means there is a new note to be added
+         */
+        if(noteIndex < 0) {
+           notes.add(0,note)
+        } else {
+            notes[noteIndex] = note
+        }
         adapter.notifyDataSetChanged()
     }
     /*
      * onClick method defines the actions after clicking on the item or the add button
      */
     override fun onClick(v: View) {
-        val intent = Intent(this,NoteDetailsActivity::class.java)
         if(v.tag != null){
-            val note : Note
-            Log.i("NoteListActivity","A note has been clicked on. The test was succesful")
-            val position = v.tag as Int
-            note = notes[position]
-            intent.putExtra(NoteDetailsActivity.EXTRA_NOTE,note)
-            intent.putExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,position)
-            startActivityForResult(intent,NoteDetailsActivity.REQUEST_EDIT_NOTE)
+            val noteIndex = v.tag as Int
+            showNoteDetails(noteIndex)
         } else {
             if(v.id == R.id.floating_button){
                 createNewNote()
             }
         }
     }
-    private fun createNewNote{
-        
+    private fun showNoteDetails(noteIndex : Int){
+        val note : Note
+        Log.i("NoteListActivity","A note has been clicked on. The test was succesful")
+        val position = noteIndex
+        note = if(position < 0) Note() else notes[position]
+
+        val intent = Intent(this,NoteDetailsActivity::class.java)
+        intent.putExtra(NoteDetailsActivity.EXTRA_NOTE,note)
+        intent.putExtra(NoteDetailsActivity.EXTRA_NOTE_INDEX,position)
+        startActivityForResult(intent,NoteDetailsActivity.REQUEST_EDIT_NOTE)
+    }
+    private fun createNewNote(){
+        showNoteDetails(-1)
     }
 }
