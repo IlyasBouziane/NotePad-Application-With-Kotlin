@@ -25,6 +25,7 @@
         android:inputType="text"
         android:maxLines="1"
         android:maxLength="20"
+
         />
 
     <EditText

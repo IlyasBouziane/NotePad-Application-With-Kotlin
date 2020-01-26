@@ -62,10 +62,6 @@ class NoteDetailsActivity : AppCompatActivity() {
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        /*
-         * Can't delete an empty new note or save it
-         */
-        if(noteIndex != -1) {
             when (item.itemId) {
                 R.id.action_save -> {
                     saveNote()
@@ -77,26 +73,28 @@ class NoteDetailsActivity : AppCompatActivity() {
                 }
                 else -> return super.onOptionsItemSelected(item)
             }
-        } else
-            return super.onOptionsItemSelected(item)
-
     }
     private fun saveNote(){
         note.title = title.text.toString()
         note.text = text.text.toString()
-
-        intent = Intent()
-        intent.putExtra(EXTRA_NOTE,note as Parcelable)
-        /*
+        if(note.text.isEmpty() || note.title.isEmpty()) {
+            Log.i("TAG", "title or text empty")
+            return
+        }
+        else {
+            intent = Intent()
+            intent.putExtra(EXTRA_NOTE, note as Parcelable)
+            /*
          * Need to add as Parcelable because there is 2 putExtra methods
          * and each one takes as parameter either Parcelable or Serializable
          * I choosed Parcelable because in this case it is an object transmitted to another activity
          */
-        intent.putExtra(EXTRA_NOTE_INDEX,noteIndex)
-        intent.action = ACTION_SAVE
+            intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
+            intent.action = ACTION_SAVE
 
-        setResult(Activity.RESULT_OK,intent)
-        finish()
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
     }
     private fun deleteNote(){
         intent = Intent()
@@ -107,16 +105,20 @@ class NoteDetailsActivity : AppCompatActivity() {
     }
     private fun showConfirmDeleteNoteDialog(){
         val dialogFragment = ConfirmDeleteDialog(note.title)
-        dialogFragment.listener = object : ConfirmDeleteDialog.ConfirmDeleteDialogListener {
-            override fun onDialogPositiveClick() {
-                deleteNote()
-            }
+        /*
+         * Can't delete a new note !
+         */
+        if(noteIndex != -1 ) {
+            dialogFragment.listener = object : ConfirmDeleteDialog.ConfirmDeleteDialogListener {
+                override fun onDialogPositiveClick() {
+                    deleteNote()
+                }
 
-            override fun onDialogNegativeClick() {
-                Log.i("TAG", "cancel")
+                override fun onDialogNegativeClick() {
+                    Log.i("TAG", "cancel")
+                }
             }
+            dialogFragment.show(supportFragmentManager, "ConfirmDeleteDialogFragment")
         }
-        dialogFragment.show(supportFragmentManager, "ConfirmDeleteDialogFragment")
-
     }
 }
