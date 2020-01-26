@@ -15,5 +15,5 @@ This is my first Android application !
 
 ## Screenshots of the final project 
 
-!image[](screenshots/1.jpg)
+![](screenshots/1.jpg)
 
