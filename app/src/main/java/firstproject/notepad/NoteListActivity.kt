@@ -8,9 +8,12 @@ import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import firstproject.notepad.NoteDetailsActivity.Companion.ACTION_DELETE
 import firstproject.notepad.NoteDetailsActivity.Companion.ACTION_SAVE
 import firstproject.notepad.utils.deleteNote
@@ -21,6 +24,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var notes : MutableList<Note>
     lateinit var adapter : NoteAdapter
+    lateinit var coordinator : CoordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,8 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        coordinator = findViewById(R.id.coordinator)
     }
 
     /*
@@ -87,6 +93,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
             return;
         notes.removeAt(indexNoteToDelete)
         adapter.notifyDataSetChanged()
+        Snackbar.make(coordinator,"Note deleted successfully",Snackbar.LENGTH_SHORT).show()
     }
 
     /*

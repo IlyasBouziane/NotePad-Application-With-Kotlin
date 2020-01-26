@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/NoteTitleFont"
-        android:hint="Note's Title"
+        android:hint="Note's Title (Required)"
         android:layout_below="@+id/toolbar"
         android:inputType="text"
         android:maxLines="1"
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textStyle="normal"
-        android:hint="Note's body "
+        android:hint="Note's body (Required)"
         android:layout_below="@+id/title"
         />
 </RelativeLayout>
